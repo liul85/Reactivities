@@ -1,6 +1,9 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
+using FluentValidation;
 using MediatR;
 using Persistence;
 using static Application.Activities.Edit;
@@ -23,36 +26,48 @@ namespace Application.Activities
 
             public string Venue { get; set; }
         }
-    }
-
-    public class Handler : IRequestHandler<Command>
-    {
-        private readonly DataContext _context;
-        public Handler(DataContext context)
+        public class CommandValidator : AbstractValidator<Command>
         {
-            this._context = context;
+            public CommandValidator()
+            {
+                RuleFor(x => x.Title).NotEmpty();
+                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.Category).NotEmpty();
+                RuleFor(x => x.Date).NotEmpty();
+                RuleFor(x => x.City).NotEmpty();
+                RuleFor(x => x.Venue).NotEmpty();
+            }
         }
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public class Handler : IRequestHandler<Command>
         {
-            var activity = await this._context.Activities.FindAsync(request.Id);
-
-            if (activity == null)
+            private readonly DataContext _context;
+            public Handler(DataContext context)
             {
-                throw new Exception("Could not find activity");
+                this._context = context;
             }
 
-            activity.Title = request.Title ?? activity.Title;
-            activity.Description = request.Description ?? activity.Description;
-            activity.Category = request.Category ?? activity.Category;
-            activity.City = request.City ?? activity.City;
-            activity.Venue = request.Venue ?? activity.Venue;
-            activity.Date = request.Date ?? activity.Date;
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            {
+                var activity = await this._context.Activities.FindAsync(request.Id);
 
-            var success = await this._context.SaveChangesAsync() > 0;
-            if (success) return Unit.Value;
+                if (activity == null)
+                {
+                    throw new RestException(HttpStatusCode.NotFound, new { activity = "Not found" });
+                }
 
-            throw new Exception("Error occured when saving changes.");
+                activity.Title = request.Title ?? activity.Title;
+                activity.Description = request.Description ?? activity.Description;
+                activity.Category = request.Category ?? activity.Category;
+                activity.City = request.City ?? activity.City;
+                activity.Venue = request.Venue ?? activity.Venue;
+                activity.Date = request.Date ?? activity.Date;
+
+                var success = await this._context.SaveChangesAsync() > 0;
+                if (success) return Unit.Value;
+
+                throw new Exception("Error occured when saving changes.");
+            }
         }
     }
 }
