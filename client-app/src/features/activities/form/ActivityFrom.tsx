@@ -8,6 +8,7 @@ interface IProp {
   selectedActivity: IActivity;
   createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
+  submitting: boolean;
 }
 
 export const ActivityFrom: React.FC<IProp> = ({
@@ -15,6 +16,7 @@ export const ActivityFrom: React.FC<IProp> = ({
   selectedActivity,
   createActivity,
   editActivity,
+  submitting,
 }) => {
   const initializeForm = () => {
     if (selectedActivity) {
@@ -38,7 +40,7 @@ export const ActivityFrom: React.FC<IProp> = ({
     if (activity.id.length === 0) {
       let newActivity = {
         ...activity,
-        id: uuid()
+        id: uuid(),
       };
       createActivity(newActivity);
     } else {
@@ -95,6 +97,7 @@ export const ActivityFrom: React.FC<IProp> = ({
           onChange={handleInputChange}
         />
         <Button
+          loading={submitting}
           floated="right"
           positive
           type="submit"

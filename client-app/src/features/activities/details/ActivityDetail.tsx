@@ -25,7 +25,7 @@ export const ActivityDetail: React.FC<IProp> = ({
         <Card.Meta>
           <span>{activity.description}</span>
         </Card.Meta>
-        <Card.Description>activity.description</Card.Description>
+        <Card.Description>{activity.description}</Card.Description>
       </Card.Content>
       <Card.Content extra>
         <Button.Group widths={2}>
