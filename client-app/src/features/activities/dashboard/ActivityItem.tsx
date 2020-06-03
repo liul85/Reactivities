@@ -1,6 +1,7 @@
 import React, { SyntheticEvent } from "react";
 import { Item, Button, Label } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activity";
+import { observer } from "mobx-react-lite";
 
 interface IProp {
   activity: IActivity;
@@ -10,7 +11,7 @@ interface IProp {
   target: string;
 }
 
-export const ActivityItem: React.FC<IProp> = ({
+const ActivityItem: React.FC<IProp> = ({
   activity,
   selectActivity,
   deleteActivity,
@@ -49,3 +50,5 @@ export const ActivityItem: React.FC<IProp> = ({
     </Item>
   );
 };
+
+export default observer(ActivityItem);
