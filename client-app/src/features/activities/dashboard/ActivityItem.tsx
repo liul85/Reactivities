@@ -3,13 +3,14 @@ import { Item, Button, Label } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activity";
 import { observer } from "mobx-react-lite";
 import ActivityStore from "../../../app/stores/activityStore";
+import { Link } from "react-router-dom";
 
 interface IProp {
   activity: IActivity;
 }
 
 const ActivityItem: React.FC<IProp> = ({ activity }) => {
-  const { selectActivity, deleteActivity, submitting, target } = useContext(
+  const { deleteActivity, submitting, target } = useContext(
     ActivityStore
   );
   return (
@@ -25,10 +26,11 @@ const ActivityItem: React.FC<IProp> = ({ activity }) => {
         </Item.Description>
         <Item.Extra>
           <Button
+            as={Link}
+            to={`/activities/${activity.id}`}
             floated="right"
             content="View"
             color="blue"
-            onClick={() => selectActivity(activity.id)}
           />
           <Button
             name={activity.id}
