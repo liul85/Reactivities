@@ -1,23 +1,17 @@
-import React, { SyntheticEvent } from "react";
+import React, { useContext } from "react";
 import { Item, Button, Label } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activity";
 import { observer } from "mobx-react-lite";
+import ActivityStore from "../../../app/stores/activityStore";
 
 interface IProp {
   activity: IActivity;
-  selectActivity: (id: string) => void;
-  deleteActivity: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
 }
 
-const ActivityItem: React.FC<IProp> = ({
-  activity,
-  selectActivity,
-  deleteActivity,
-  submitting,
-  target,
-}) => {
+const ActivityItem: React.FC<IProp> = ({ activity }) => {
+  const { selectActivity, deleteActivity, submitting, target } = useContext(
+    ActivityStore
+  );
   return (
     <Item key={activity.id}>
       <Item.Content>
