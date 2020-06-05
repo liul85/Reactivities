@@ -1,19 +1,26 @@
-import React, { useContext } from "react";
-import { Item, Segment } from "semantic-ui-react";
+import React, { useContext, Fragment } from "react";
+import { Item, Label } from "semantic-ui-react";
 import ActivityItem from "./ActivityItem";
 import { observer } from "mobx-react-lite";
 import ActivityStore from "../../../app/stores/activityStore";
 
 const ActivityList = () => {
-  const { activitiesByDate: activities } = useContext(ActivityStore);
+  const { activitiesByDate } = useContext(ActivityStore);
   return (
-    <Segment clearing>
-      <Item.Group divided>
-        {activities.map((activity) => (
-          <ActivityItem key={activity.id} activity={activity} />
-        ))}
-      </Item.Group>
-    </Segment>
+    <Fragment>
+      {activitiesByDate.map(([date, activities]) => (
+        <Fragment key={date}>
+          <Label size="large" color="blue">
+            {date}
+          </Label>
+          <Item.Group divided>
+            {activities.map((activity) => (
+              <ActivityItem key={activity.id} activity={activity} />
+            ))}
+          </Item.Group>
+        </Fragment>
+      ))}
+    </Fragment>
   );
 };
 
