@@ -9,7 +9,6 @@ class ActivityStore {
   @observable activityRegistry = new Map<string, IActivity>();
   @observable activities: IActivity[] = [];
   @observable activity: IActivity | undefined;
-  @observable editMode: boolean = false;
   @observable loadingInitial: boolean = false;
   @observable submitting: boolean = false;
   @observable target: string = "";
@@ -24,16 +23,16 @@ class ActivityStore {
     this.loadingInitial = true;
     try {
       const activities = await agent.Activities.list();
-      activities.forEach((activity) => {
-        activity.date = activity.date.split(".")[0];
-        runInAction("loading activities", () => {
+      runInAction("loading activities", () => {
+        activities.forEach((activity) => {
+          activity.date = activity.date.split(".")[0];
           this.activityRegistry.set(activity.id, activity);
         });
       });
     } catch (e) {
       console.error(`Failed to get activites; ${e}`);
     } finally {
-      runInAction("loading activities", () => (this.loadingInitial = false));
+      runInAction(() => (this.loadingInitial = false));
     }
   };
 
@@ -66,28 +65,12 @@ class ActivityStore {
       runInAction("creating activities", () => {
         this.activityRegistry.set(activity.id, activity);
         this.activity = activity;
-        this.editMode = false;
       });
     } catch (e) {
       console.error(`Error occured when creating new activity: ${e}`);
     } finally {
-      runInAction("creating activities", () => (this.submitting = false));
+      runInAction(() => (this.submitting = false));
     }
-  };
-
-  @action openCreateForm = () => {
-    this.editMode = true;
-    this.activity = undefined;
-  };
-
-  @action openEditForm = (id: string) => {
-    this.editMode = true;
-    this.activity = this.activityRegistry.get(id);
-  };
-
-  @action selectActivity = (id: string) => {
-    this.activity = this.activityRegistry.get(id);
-    this.editMode = false;
   };
 
   @action editActivity = async (activity: IActivity) => {
@@ -97,12 +80,11 @@ class ActivityStore {
       runInAction("editing activity", () => {
         this.activityRegistry.set(activity.id, activity);
         this.activity = activity;
-        this.editMode = false;
       });
     } catch (e) {
       console.error(`Failed to update activites; ${e}`);
     } finally {
-      runInAction("editing activity", () => (this.submitting = false));
+      runInAction(() => (this.submitting = false));
     }
   };
 
@@ -118,16 +100,8 @@ class ActivityStore {
     } catch (e) {
       console.error(`Failed to delete activity; ${e}`);
     } finally {
-      runInAction("deleting activity", () => (this.submitting = false));
+      runInAction(() => (this.submitting = false));
     }
-  };
-
-  @action cancelSelectedActivity = () => {
-    this.activity = undefined;
-  };
-
-  @action closeForm = () => {
-    this.editMode = false;
   };
 
   @action cleanActivity = () => {

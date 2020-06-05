@@ -18,7 +18,6 @@ const ActivityFrom: React.FC<RouteComponentProps<DetailParams>> = ({
     createActivity,
     editActivity,
     submitting,
-    closeForm,
     activity: initialState,
     loadActivity,
     cleanActivity,
@@ -44,7 +43,13 @@ const ActivityFrom: React.FC<RouteComponentProps<DetailParams>> = ({
     return () => {
       cleanActivity();
     };
-  }, [loadActivity, cleanActivity, match.params.id, initialState, activity.id.length]);
+  }, [
+    loadActivity,
+    cleanActivity,
+    match.params.id,
+    initialState,
+    activity.id.length,
+  ]);
 
   const handleSubmit = () => {
     if (activity.id.length === 0) {
@@ -122,7 +127,7 @@ const ActivityFrom: React.FC<RouteComponentProps<DetailParams>> = ({
           floated="right"
           type="button"
           content="Cancel"
-          onClick={() => closeForm()}
+          onClick={() => history.push("/activities")}
         />
       </Form>
     </Segment>
