@@ -11,7 +11,7 @@ import {
   Switch,
 } from "react-router-dom";
 import { HomePage } from "../../features/home/HomePage";
-import ActivityFrom from "../../features/activities/form/ActivityFrom";
+import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDetail from "../../features/activities/details/ActivityDetail";
 import NotFound from "./NotFound";
 import { ToastContainer } from "react-toastify";
@@ -32,8 +32,8 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                 <Route path="/activities/:id" component={ActivityDetail} />
                 <Route
                   key={location.key}
-                  path={["/createActivity", "/edit/:id"]}
-                  component={ActivityFrom}
+                  path={["/createActivity", "/manage/:id"]}
+                  component={ActivityForm}
                 />
                 <Route component={NotFound} />
               </Switch>

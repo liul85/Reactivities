@@ -22,10 +22,13 @@ axios.interceptors.response.use(undefined, (error) => {
     history.push("/notfound");
   }
 
+  if (status === 400 && ["post", "put"].includes(config.method)) {
+    toast.error("Bad Request to server");
+  }
+
   if (status === 500) {
     toast.error("Server error - Check the terminal for more info!");
   }
-
 });
 
 const responseBody = (response: AxiosResponse) => response.data;
