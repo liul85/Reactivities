@@ -1,18 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./app/layout/style.css";
+import 'react-toastify/dist/ReactToastify.css';
 import App from "./app/layout/App";
 import * as serviceWorker from "./serviceWorker";
 import "mobx-react-lite/batchingForReactDom";
-import { BrowserRouter } from "react-router-dom";
+import { Router } from "react-router-dom";
 import ScrollTop from "./app/layout/ScrollTop";
+import { createBrowserHistory } from "history";
+
+export const history = createBrowserHistory();
 
 ReactDOM.render(
-  <BrowserRouter>
+  <Router history={history}>
     <ScrollTop>
       <App />
     </ScrollTop>
-  </BrowserRouter>,
+  </Router>,
   document.getElementById("root")
 );
 
