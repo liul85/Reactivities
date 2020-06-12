@@ -3,10 +3,10 @@ import { Grid } from "semantic-ui-react";
 import ActivityList from "./ActivityList";
 import { observer } from "mobx-react-lite";
 import { LoadingComponent } from "../../../app/layout/LoadingComponent";
-import ActivityStore from "../../../app/stores/activityStore";
+import { rootStoreContext } from "../../../app/stores/rootStore";
 
 const ActivityDashboard = () => {
-  const activityStore = useContext(ActivityStore);
+  const { activityStore } = useContext(rootStoreContext);
 
   useEffect(() => {
     activityStore.loadActivities();

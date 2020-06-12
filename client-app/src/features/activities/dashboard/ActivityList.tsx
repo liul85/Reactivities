@@ -2,13 +2,14 @@ import React, { useContext, Fragment } from "react";
 import { Item, Label } from "semantic-ui-react";
 import ActivityItem from "./ActivityItem";
 import { observer } from "mobx-react-lite";
-import ActivityStore from "../../../app/stores/activityStore";
+import { rootStoreContext } from "../../../app/stores/rootStore";
 
 const ActivityList = () => {
-  const { activitiesByDate } = useContext(ActivityStore);
+  const { activityStore } = useContext(rootStoreContext);
+
   return (
     <Fragment>
-      {activitiesByDate.map(([date, activities]) => (
+      {activityStore.activitiesByDate.map(([date, activities]) => (
         <Fragment key={date}>
           <Label size="large" color="blue">
             {date}
