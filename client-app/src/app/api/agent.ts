@@ -5,6 +5,20 @@ import { toast } from "react-toastify";
 import { IUser, IUserFormValue } from "../models/user";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
+
+axios.interceptors.request.use(
+  (config) => {
+    const token = window.localStorage.getItem("jwt");
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (err) => Promise.reject(err)
+);
+
 axios.interceptors.response.use(undefined, (error) => {
   if (error.message === "Network Error" && !error.response) {
     toast.error("Network error - Check your network!");
