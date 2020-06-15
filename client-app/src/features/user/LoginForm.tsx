@@ -45,7 +45,7 @@ export const LoginForm = () => {
           )}
           <br />
           <Button
-            disabled={invalid && !dirtySinceLastSubmit || pristine}
+            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
             loading={submitting}
             positive
             content="Login"
