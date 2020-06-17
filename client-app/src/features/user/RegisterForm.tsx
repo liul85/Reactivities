@@ -1,25 +1,28 @@
 import React, { useContext } from "react";
-import { Form as FinalForm, Field } from "react-final-form";
-import { Form, Button, Header } from "semantic-ui-react";
-import { TextInput } from "../../app/common/form/TextInput";
 import { rootStoreContext } from "../../app/stores/rootStore";
-import { IUserFormValue } from "../../app/models/user";
-import { combineValidators, isRequired } from "revalidate";
-import ErrorMessage from "../../app/common/form/ErrorMessage";
+import { Form as FinalForm, Field } from "react-final-form";
 import { FORM_ERROR } from "final-form";
+import { isRequired, combineValidators } from "revalidate";
+import { Form, Header, Button } from "semantic-ui-react";
+import { TextInput } from "../../app/common/form/TextInput";
+import ErrorMessage from "../../app/common/form/ErrorMessage";
+import { IUserFormValue } from "../../app/models/user";
 
 const validate = combineValidators({
+  username: isRequired("username"),
+  displayName: isRequired("displayName"),
   email: isRequired("email"),
   password: isRequired("password"),
 });
 
-export const LoginForm = () => {
-  const { userStore } = useContext(rootStoreContext);
-  const { login } = userStore;
+const RegisterForm = () => {
+  const rootStore = useContext(rootStoreContext);
+  const { register } = rootStore.userStore;
+
   return (
     <FinalForm
       onSubmit={(values: IUserFormValue) =>
-        login(values).catch((error) => ({
+        register(values).catch((error) => ({
           [FORM_ERROR]: error,
         }))
       }
@@ -27,7 +30,6 @@ export const LoginForm = () => {
       render={({
         handleSubmit,
         submitting,
-        form,
         submitError,
         invalid,
         pristine,
@@ -40,6 +42,12 @@ export const LoginForm = () => {
             color="teal"
             textAlign="center"
           />
+          <Field name="username" component={TextInput} placeholder="Username" />
+          <Field
+            name="displayName"
+            component={TextInput}
+            placeholder="DisplayName"
+          />
           <Field name="email" component={TextInput} placeholder="Email" />
           <Field
             name="password"
@@ -48,17 +56,14 @@ export const LoginForm = () => {
             type="password"
           />
           {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage
-              error={submitError}
-              text="Invalid email or password"
-            />
+            <ErrorMessage error={submitError} />
           )}
           <br />
           <Button
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}
             loading={submitting}
             color="teal"
-            content="Login"
+            content="Register"
             fluid
           />
         </Form>
@@ -66,3 +71,5 @@ export const LoginForm = () => {
     />
   );
 };
+
+export default RegisterForm;
